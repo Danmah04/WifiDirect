@@ -1,0 +1,10 @@
+#!/bin/sh
+# Stoppt den Hook wenn Interface runtergeht
+
+IFACE="$1"
+prgdir=/home/plusoptix/plusoptix/program
+
+[ "$IFACE" = "wlan0" ] || exit 0
+
+pkill -f "wpa_cli .* -i $IFACE .* -a ${prgdir}/wfd_action.sh" 2>/dev/null
+exit 0

@@ -1,0 +1,14 @@
+# 1) Hook + Action vorhanden + Rechte
+ls -l /etc/network/if-up.d/wfd_hook
+ls -l /home/plusoptix/plusoptix/program/wfd_action.sh
+head -n 1 /home/plusoptix/plusoptix/program/wfd_action.sh
+
+# 2) Action manuell testen (zeigt dir E### sofort)
+sudo /home/plusoptix/plusoptix/program/wfd_action.sh wlan0 MANUAL ; echo "rc=$?"
+
+# 3) Log prüfen
+tail -n 120 /var/log/wfd-action.log
+
+# 4) Interface + scan (nur zur Plausi)
+ip link show wlan0
+sudo iw dev wlan0 scan | grep -E "SSID: DIRECT-|signal:|freq:" -n | head

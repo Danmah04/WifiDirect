@@ -1,0 +1,23 @@
+#!/bin/sh
+#set -x
+# Startet wpa_cli action-hook, wenn Interface hochkommt
+
+IFACE="$1"
+prgdir=/home/plusoptix/plusoptix/program
+
+[ "$IFACE" = "wlan0" ] || exit 1
+
+# nicht doppelt starten
+#pgrep -f "wpa_cli .* -i $IFACE .* -a ${prgdir}/wfd_action.sh" >/dev/null 2>&1 && exit 2
+pgrep -f "wpa_cli.*-a ${prgdir}/wfd_action.sh" >/dev/null 2>&1 && exit 2
+
+# kurz warten bis socket da ist
+for i in 1 2 3 4 5; do
+  [ -S "/var/run/wpa_supplicant/$IFACE" ] && break
+  sleep 1
+done
+
+# starten
+/usr/sbin/wpa_cli -i "$IFACE" -p /var/run/wpa_supplicant -a ${prgdir}/wfd_action.sh -B >/dev/null 2>&1
+
+exit 0

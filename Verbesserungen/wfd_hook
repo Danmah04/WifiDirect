@@ -1,0 +1,17 @@
+#!/bin/sh
+set -u
+
+IFACE="${IFACE:-${1:-wlan0}}"
+
+ACTION="/home/plusoptix/plusoptix/program/wfd_action.sh"
+
+if [ ! -x "$ACTION" ]; then
+  printf 'E090: missing or not executable: %s\n' "$ACTION" >&2
+  exit 90
+fi
+
+# optional: nur für wlan0 triggern
+# [ "$IFACE" = "wlan0" ] || exit 0
+
+"$ACTION" "$IFACE" "IFUP"
+exit $?
